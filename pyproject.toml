@@ -1,0 +1,45 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "adk-topk"
+version = "0.1.0"
+description = "TopK for Google's Agent Development Kit (ADK): keyword (BM25), semantic and hybrid search tools, plus a per-user TopK memory service."
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.10"
+authors = [{ name = "TopK Team", email = "support@topk.io" }]
+keywords = ["adk", "google-adk", "agent development kit", "topk", "agent memory", "memory service", "hybrid search", "bm25", "semantic search", "rag", "multi-tenant"]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Intended Audience :: Developers",
+  "License :: OSI Approved :: MIT License",
+  "Programming Language :: Python :: 3",
+  "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+dependencies = ["google-adk>=1.20.0", "topk-sdk>=0.15.0"]
+
+[project.urls]
+Homepage = "https://topk.io"
+Documentation = "https://adk.dev/integrations/topk/"
+Repository = "https://github.com/topk-io/adk-topk"
+Issues = "https://github.com/topk-io/adk-topk/issues"
+
+[dependency-groups]
+test = ["pytest>=8", "pytest-asyncio>=0.23", "ruff>=0.6"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/adk_topk"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+markers = ["integration: needs TOPK_API_KEY and TOPK_REGION", "agent: also needs an LLM key (GOOGLE_API_KEY or ANTHROPIC_API_KEY)"]
+
+[tool.ruff]
+line-length = 120
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP"]

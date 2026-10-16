@@ -1,0 +1,23 @@
+name: test
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python: ["3.10", "3.13"]
+        adk: ["google-adk==1.20.0", "google-adk"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+      - run: uv venv --python ${{ matrix.python }} && uv pip install -e . "${{ matrix.adk }}" pytest pytest-asyncio ruff
+      - run: uv run --no-sync ruff check . && uv run --no-sync ruff format --check .
+      - run: uv run --no-sync pytest -q
+        env:
+          TOPK_API_KEY: ${{ secrets.TOPK_API_KEY }}
+          TOPK_REGION: ${{ secrets.TOPK_REGION }}
